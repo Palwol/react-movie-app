@@ -21,7 +21,7 @@ function App() {
           rel="stylesheet"
         />
       </Helmet>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Header />
         <Routes>
           <Route path="/series" element={<Series />}></Route>
