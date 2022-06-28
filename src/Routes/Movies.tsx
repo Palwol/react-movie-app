@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getDetails, getMovies, IMovie, IMoviesResult } from "./api";
-import { makeImagePath, NEXFLIX_LOGO_URL } from "./utils";
+import { makeImagePath, NETFLIX_LOGO_URL } from "./utils";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -48,11 +48,34 @@ const Overview = styled.p`
   font-weight: 300;
   text-shadow: 1px 1px 5px rgba(47, 54, 64, 0.3);
   line-height: 1.1rem;
+  margin-bottom: 20px;
+`;
+
+const BannerBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  font-size: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  border: none;
+  span {
+    margin-left: 7px;
+    font-size: 15px;
+    font-weight: 300;
+    color: ${(props) => props.theme.white.lighter};
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 `;
 
 const Slider = styled.div`
   position: relative;
-  top: -90px;
+  top: -80px;
   margin-bottom: 120px;
 `;
 
@@ -91,12 +114,8 @@ const RowBtn = styled(motion.button)`
   }
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
-  background-color: white;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  background-position: center center;
-  height: 100px;
+const Box = styled(motion.div)`
+  height: auto;
   &:hover {
     cursor: pointer;
   }
@@ -108,17 +127,24 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
   }
 `;
 
+const CoverImage = styled.div<{ bgphoto: string }>`
+  width: 100%;
+  height: 100px;
+  background-image: url(${(props) => props.bgphoto});
+  background-size: cover;
+  background-position: center center;
+`;
+
 const Info = styled(motion.div)`
   padding: 5px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: black;
   opacity: 0;
-  position: absolute;
   width: 100%;
   bottom: 0;
   h4 {
     text-align: center;
     font-size: 8px;
-    font-weight: 200;
+    font-weight: 400;
   }
 `;
 
@@ -135,8 +161,8 @@ const BigMovie = styled(motion.div)`
   position: absolute;
   display: flex;
   flex-direction: column;
-  width: 40vw;
-  height: 80vh;
+  width: 50vw;
+  height: auto;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -154,15 +180,18 @@ const BigCover = styled.div`
 `;
 
 const BigTitle = styled.h3`
-  font-size: 20px;
+  font-size: 23px;
   position: relative;
-  top: -60px;
+  top: -70px;
   margin: 0 20px;
   color: ${(props) => props.theme.white.lighter};
 `;
 
 const BigOverview = styled.p`
   margin: 0 20px;
+  margin-bottom: 10px;
+  position: relative;
+  top: -30px;
   font-size: 12px;
   font-weight: 200;
   line-height: 1.1rem;
@@ -187,7 +216,7 @@ const boxVariants = {
   },
   hover: {
     scale: 1.3,
-    y: -20,
+    y: -40,
     transition: { delay: 0.5, type: "tween", duration: 0.3 },
   },
 };
@@ -199,9 +228,26 @@ const infoVariants = {
   },
 };
 
+const bigVariants = {
+  initial: {
+    scale: 0,
+    opacity: 0,
+  },
+  clicked: {
+    scale: 1,
+    opacity: 1,
+    transition: { type: "tween", duration: 0.3 },
+  },
+  exit: {
+    scale: 0,
+    opacity: 0,
+    transition: { type: "tween", duration: 0.3 },
+  },
+};
+
 const offset = 6;
 
-function Home() {
+function Movies() {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch("/movies/:movieId");
   const { scrollY } = useViewportScroll();
@@ -272,6 +318,17 @@ function Home() {
           >
             <Title>{nowData?.results[0].title}</Title>
             <Overview>{nowData?.results[0].overview}</Overview>
+            <BannerBtn onClick={() => onBoxClicked(nowData?.results[0].id)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23px"
+                height="23px"
+                fill="white"
+              >
+                <path d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 11 7 L 11 9 L 13 9 L 13 7 L 11 7 z M 11 11 L 11 17 L 13 17 L 13 11 L 11 11 z"></path>
+              </svg>
+              <span>Details</span>
+            </BannerBtn>
           </Banner>
           <Slider id="now">
             <SliderTitle>Now Playing</SliderTitle>
@@ -299,7 +356,6 @@ function Home() {
                   .slice(offset * nowIndex, offset * (nowIndex + 1))
                   .map((movie) => (
                     <Box
-                      layoutId={"now" + movie.id}
                       variants={boxVariants}
                       key={"now" + movie.id}
                       initial="normal"
@@ -309,12 +365,14 @@ function Home() {
                         setLayoutId("now" + movie.id);
                       }}
                       transition={{ type: "tween" }}
-                      bgphoto={
-                        movie.backdrop_path
-                          ? makeImagePath(movie.backdrop_path, "w500")
-                          : NEXFLIX_LOGO_URL
-                      }
                     >
+                      <CoverImage
+                        bgphoto={
+                          movie.backdrop_path
+                            ? makeImagePath(movie.backdrop_path, "w500")
+                            : NETFLIX_LOGO_URL
+                        }
+                      ></CoverImage>
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
                       </Info>
@@ -348,7 +406,6 @@ function Home() {
                   .slice(offset * topIndex, offset * (topIndex + 1))
                   .map((movie) => (
                     <Box
-                      layoutId={"top" + movie.id}
                       variants={boxVariants}
                       key={"top" + movie.id}
                       initial="normal"
@@ -358,12 +415,14 @@ function Home() {
                         setLayoutId("top" + movie.id);
                       }}
                       transition={{ type: "tween" }}
-                      bgphoto={
-                        movie.backdrop_path
-                          ? makeImagePath(movie.backdrop_path, "w500")
-                          : NEXFLIX_LOGO_URL
-                      }
                     >
+                      <CoverImage
+                        bgphoto={
+                          movie.backdrop_path
+                            ? makeImagePath(movie.backdrop_path, "w500")
+                            : NETFLIX_LOGO_URL
+                        }
+                      ></CoverImage>
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
                       </Info>
@@ -397,7 +456,6 @@ function Home() {
                   .slice(offset * upcomingIndex, offset * (upcomingIndex + 1))
                   .map((movie) => (
                     <Box
-                      layoutId={"upcoming" + movie.id}
                       variants={boxVariants}
                       key={"upcoming" + movie.id}
                       initial="normal"
@@ -407,12 +465,14 @@ function Home() {
                         setLayoutId("upcoming" + movie.id);
                       }}
                       transition={{ type: "tween" }}
-                      bgphoto={
-                        movie.backdrop_path
-                          ? makeImagePath(movie.backdrop_path, "w500")
-                          : NEXFLIX_LOGO_URL
-                      }
                     >
+                      <CoverImage
+                        bgphoto={
+                          movie.backdrop_path
+                            ? makeImagePath(movie.backdrop_path, "w500")
+                            : NETFLIX_LOGO_URL
+                        }
+                      ></CoverImage>
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
                       </Info>
@@ -425,7 +485,6 @@ function Home() {
             <SliderTitle>Latest Movie</SliderTitle>
             <Row key={"latest" + latestData?.id}>
               <Box
-                layoutId={"latest" + latestData?.id}
                 variants={boxVariants}
                 key={"latest" + latestData?.id}
                 initial="normal"
@@ -435,24 +494,29 @@ function Home() {
                   setLayoutId("latest" + latestData?.id);
                 }}
                 transition={{ type: "tween" }}
-                bgphoto={
-                  latestData?.backdrop_path
-                    ? makeImagePath(latestData?.backdrop_path, "w500")
-                    : NEXFLIX_LOGO_URL
-                }
               >
+                <CoverImage
+                  bgphoto={
+                    latestData?.backdrop_path
+                      ? makeImagePath(latestData?.backdrop_path, "w500")
+                      : NETFLIX_LOGO_URL
+                  }
+                ></CoverImage>
                 <Info variants={infoVariants}>
                   <h4>{latestData?.title}</h4>
                 </Info>
               </Box>
             </Row>
           </Slider>
-          <AnimatePresence>
+          <AnimatePresence initial={false}>
             {bigMovieMatch ? (
               <>
                 <BigMovie
-                  style={{ top: scrollY.get() + 80 }}
-                  layoutId={layoutId}
+                  variants={bigVariants}
+                  initial="initial"
+                  animate="clicked"
+                  exit="exit"
+                  style={{ top: scrollY.get() + 40 }}
                 >
                   {newMovie && (
                     <>
@@ -482,4 +546,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Movies;

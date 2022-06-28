@@ -67,6 +67,9 @@ const Search = styled.span`
   margin-right: 60px;
   svg {
     height: 18px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   position: relative;
 `;
@@ -74,6 +77,7 @@ const Search = styled.span`
 const Input = styled(motion.input)`
   transform-origin: right;
   position: absolute;
+  height: 23px;
   left: -150px;
   background-color: rgba(255, 255, 255, 0.05);
   color: white;
