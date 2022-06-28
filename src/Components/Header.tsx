@@ -13,6 +13,7 @@ const Nav = styled(motion.nav)`
   color: ${(props) => props.theme.white.darker};
   height: 50px;
   font-size: 10px;
+  z-index: 99;
 `;
 
 const Col = styled.div`

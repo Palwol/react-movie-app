@@ -108,7 +108,7 @@ const RowBtn = styled(motion.button)`
   color: ${(props) => props.theme.white.darker};
   background-color: transparent;
   border: none;
-  z-index: 99;
+  z-index: 10;
   &:hover {
     cursor: pointer;
   }
@@ -168,7 +168,7 @@ const BigMovie = styled(motion.div)`
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
-  z-index: 99;
+  z-index: 30;
   background-color: black;
 `;
 
