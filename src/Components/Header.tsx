@@ -115,6 +115,7 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch("/");
   const seriesMatch = useMatch("/series");
+  const tvMatch = useMatch("/series/:tvId");
   const movieMatch = useMatch("movies/:movieId");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
@@ -160,7 +161,7 @@ function Header() {
           </Item>
           <Item>
             <Link to="/series">Series</Link>
-            {seriesMatch && <Circle layoutId="circle" />}
+            {(seriesMatch || tvMatch) && <Circle layoutId="circle" />}
           </Item>
         </Items>
       </Col>

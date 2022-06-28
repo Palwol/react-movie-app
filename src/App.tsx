@@ -24,11 +24,13 @@ function App() {
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Header />
         <Routes>
-          <Route path="/series" element={<Series />}></Route>
-          <Route path="/search" element={<Search />}></Route>
           <Route path="/" element={<Movies />}>
-            <Route path="movies/:movieId" element={<Movies />}></Route>
+            <Route path="/movies/:movieId" element={<Movies />}></Route>
           </Route>
+          <Route path="/series" element={<Series />}>
+            <Route path="/series/:tvId" element={<Series />}></Route>
+          </Route>
+          <Route path="/search" element={<Search />}></Route>
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
