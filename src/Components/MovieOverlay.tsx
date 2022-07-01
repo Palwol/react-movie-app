@@ -199,7 +199,9 @@ function MovieOverlay() {
                     <h5>Runtime : </h5>
                     <span>{bigMovie?.runtime}min</span>
                   </Info>
-                  <Tagline>{`"${bigMovie?.tagline}"`}</Tagline>
+                  {bigMovie.tagline ? (
+                    <Tagline>{`"${bigMovie?.tagline}"`}</Tagline>
+                  ) : null}
                   <p>{bigMovie?.overview}</p>
                 </BigOverview>
               </>

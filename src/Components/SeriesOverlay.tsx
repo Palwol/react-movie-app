@@ -134,6 +134,56 @@ const Tagline = styled.span`
   margin-bottom: 15px;
 `;
 
+const Episode = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 15px 30px;
+  h3 {
+    font-size: 18px;
+    font-weight: 500;
+  }
+`;
+
+const EpisodeDetail = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+`;
+
+const EpisodeCover = styled.div<{ bgphoto: string }>`
+  width: 110px;
+  height: 60px;
+  background-image: url(${(props) => props.bgphoto});
+  background-size: cover;
+  background-position: center center;
+`;
+
+const EpisodeOverview = styled.div`
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  margin-left: 12px;
+  p {
+    font-size: 10px;
+    font-weight: 100;
+    line-height: 0.9rem;
+  }
+`;
+const EpisodeTitle = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  h4 {
+    font-size: 12px;
+    font-weight: 400;
+  }
+  span {
+    margin-left: 15px;
+    font-size: 10px;
+    font-weight: 300;
+  }
+`;
+
 const bigVariants = {
   initial: {
     scale: 0,
@@ -204,6 +254,32 @@ function SeriesOverlay() {
                   ) : null}
                   <p>{bigSeries?.overview}</p>
                 </BigOverview>
+                <Episode>
+                  <h3>Last Episode</h3>
+                  <EpisodeDetail>
+                    <EpisodeCover
+                      bgphoto={
+                        bigSeries?.last_episode_to_air.still_path
+                          ? makeImagePath(
+                              bigSeries?.last_episode_to_air.still_path,
+                              "w500"
+                            )
+                          : NETFLIX_LOGO_URL
+                      }
+                    />
+                    <EpisodeOverview>
+                      <EpisodeTitle>
+                        <h4>{bigSeries?.last_episode_to_air.name}</h4>
+                        <span>
+                          {bigSeries?.last_episode_to_air.runtime
+                            ? bigSeries?.last_episode_to_air.runtime + "min"
+                            : null}
+                        </span>
+                      </EpisodeTitle>
+                      <p>{bigSeries?.last_episode_to_air.overview}</p>
+                    </EpisodeOverview>
+                  </EpisodeDetail>
+                </Episode>
               </>
             )}
           </BigMovie>
