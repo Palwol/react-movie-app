@@ -259,7 +259,7 @@ function SeriesOverlay() {
                   <EpisodeDetail>
                     <EpisodeCover
                       bgphoto={
-                        bigSeries?.last_episode_to_air.still_path
+                        bigSeries?.last_episode_to_air?.still_path
                           ? makeImagePath(
                               bigSeries?.last_episode_to_air.still_path,
                               "w500"
@@ -269,14 +269,14 @@ function SeriesOverlay() {
                     />
                     <EpisodeOverview>
                       <EpisodeTitle>
-                        <h4>{bigSeries?.last_episode_to_air.name}</h4>
+                        <h4>{bigSeries?.last_episode_to_air?.name}</h4>
                         <span>
-                          {bigSeries?.last_episode_to_air.runtime
+                          {bigSeries?.last_episode_to_air?.runtime
                             ? bigSeries?.last_episode_to_air.runtime + "min"
                             : null}
                         </span>
                       </EpisodeTitle>
-                      <p>{bigSeries?.last_episode_to_air.overview}</p>
+                      <p>{bigSeries?.last_episode_to_air?.overview}</p>
                     </EpisodeOverview>
                   </EpisodeDetail>
                 </Episode>

@@ -8,8 +8,8 @@ export interface IMovie {
   title: string;
   name?: string;
   overview: string;
-  tagline: string;
-  runtime: number;
+  tagline?: string;
+  runtime?: number;
   release_date: string;
 }
 
@@ -27,10 +27,10 @@ export interface ISeries {
   title?: string;
   name: string;
   overview: string;
-  tagline: string;
-  number_of_episodes: number;
+  tagline?: string;
+  number_of_episodes?: number;
   first_air_date: string;
-  last_episode_to_air: {
+  last_episode_to_air?: {
     name: string;
     overview: string;
     runtime: number;
@@ -66,4 +66,16 @@ export function getSeriesDetails(id: string | undefined) {
   return fetch(`${BASE_PATH}/tv/${id}?api_key=${API_KEY}`).then((response) =>
     response.json()
   );
+}
+
+export function getMovieSearch(keyword: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}`
+  ).then((response) => response.json());
+}
+
+export function getSeriesSearch(keyword: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}`
+  ).then((response) => response.json());
 }

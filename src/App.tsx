@@ -2,8 +2,10 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./Components/Header";
 import Movies from "./Routes/Movies";
+import MoviesSearch from "./Routes/MoviesSearch";
 import Search from "./Routes/Search";
 import Series from "./Routes/Series";
+import SeriesSearch from "./Routes/SeriesSearch";
 
 function App() {
   return (
@@ -30,7 +32,10 @@ function App() {
           <Route path="/series" element={<Series />}>
             <Route path="/series/:tvId" element={<Series />}></Route>
           </Route>
-          <Route path="/search" element={<Search />}></Route>
+          <Route path="/search" element={<Search />}>
+            <Route path="/search/movies" element={<MoviesSearch />}></Route>
+            <Route path="/search/series" element={<SeriesSearch />}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
