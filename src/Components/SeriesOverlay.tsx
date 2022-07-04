@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getSeriesDetails, ISeries } from "../Routes/api";
 import { makeImagePath, NETFLIX_LOGO_URL } from "../Routes/utils";
@@ -201,19 +201,34 @@ const bigVariants = {
   },
 };
 
-function SeriesOverlay() {
+interface ISeriesProps {
+  search: string | null;
+}
+
+function SeriesOverlay({ search }: ISeriesProps) {
   const navigate = useNavigate();
-  const bigSeriesMatch = useMatch("/series/:tvId");
+  const location = useLocation();
+  const seriesMatch = useMatch("/series/:tvId");
+  const seriesSearchMatch = useMatch("/search/series/:tvId");
+  const seriesId = seriesMatch
+    ? location.pathname.slice(8)
+    : location.pathname.slice(15);
   const { scrollY } = useViewportScroll();
-  const onOverlayClicked = () => navigate("/series");
+  const onOverlayClicked = () => {
+    if (seriesSearchMatch) {
+      navigate(`/search/series?keyword=${search}`);
+    } else if (seriesMatch) {
+      navigate("/series");
+    }
+  };
   const { data: bigSeries } = useQuery<ISeries>(
-    "series",
-    () => getSeriesDetails(bigSeriesMatch?.params.tvId),
-    { enabled: !!bigSeriesMatch }
+    ["series", seriesId],
+    () => getSeriesDetails(seriesId),
+    { enabled: !!seriesMatch || !!seriesSearchMatch }
   );
   return (
     <AnimatePresence initial={false}>
-      {bigSeriesMatch ? (
+      {seriesMatch || seriesSearchMatch ? (
         <>
           <BigMovie
             variants={bigVariants}

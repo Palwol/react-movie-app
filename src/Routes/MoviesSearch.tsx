@@ -1,8 +1,14 @@
 import { useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getMovieSearch, IMovieResult } from "./api";
 import { makeImagePath, NETFLIX_LOGO_URL } from "./utils";
+
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Wrapper = styled.div`
   display: grid;
@@ -36,7 +42,9 @@ function MoviesSearch() {
   return (
     <>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <Loading>
+          <h1>Loading...</h1>
+        </Loading>
       ) : data?.results.length ? (
         <Wrapper>
           {data?.results.map((movie) => (
@@ -52,7 +60,9 @@ function MoviesSearch() {
           ))}
         </Wrapper>
       ) : (
-        <h2>There is no result</h2>
+        <Loading>
+          <h2>There is no result</h2>
+        </Loading>
       )}
     </>
   );

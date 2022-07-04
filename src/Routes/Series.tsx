@@ -131,7 +131,7 @@ function Series() {
             data={popularData}
           />
           <Slider key="top" type="series" title="Top Rated" data={topData} />
-          <SeriesOverlay />
+          <SeriesOverlay search="" />
         </>
       )}
     </Wrapper>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Nav = styled.ul`
   display: flex;
   justify-content: center;
-  margin-top: 60px;
+  margin-top: 80px;
   margin-bottom: 20px;
 `;
 

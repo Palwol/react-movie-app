@@ -81,13 +81,14 @@ const Input = styled(motion.input)`
   position: absolute;
   height: 23px;
   left: -150px;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   color: white;
   outline: none;
   padding-left: 30px;
   border: 1px solid ${(props) => props.theme.white.darker};
   &::placeholder {
     font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
   }
 `;
 
@@ -122,6 +123,7 @@ function Header() {
   const seriesMatch = useMatch("/series");
   const tvMatch = useMatch("/series/:tvId");
   const movieMatch = useMatch("movies/:movieId");
+  const seriesSearchMatch = useMatch("/search/series");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
@@ -146,9 +148,14 @@ function Header() {
     });
   }, [scrollY, navAnimation]);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    navigate(`/search/movies?keyword=${data.keyword}`);
+    if (seriesSearchMatch) {
+      navigate(`/search/series?keyword=${data.keyword}`);
+    } else {
+      navigate(`/search/movies?keyword=${data.keyword}`);
+    }
+    setValue("keyword", "");
   };
   return (
     <Nav variants={navVariants} animate={navAnimation} initial="top">
