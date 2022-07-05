@@ -136,7 +136,7 @@ function Movies() {
             data={upcomingData}
           />
           <Slider key="top" type="movies" title="Top Rated" data={topData} />
-          <MovieOverlay />
+          <MovieOverlay search="" />
         </>
       )}
     </Wrapper>

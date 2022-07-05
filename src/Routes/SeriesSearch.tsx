@@ -15,10 +15,11 @@ const Loading = styled.div`
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
   column-gap: 25px;
   align-items: flex-start;
-  margin: 45px 45px 30px 45px;
+  justify-items: center;
+  margin: 45px 50px 30px 50px;
 `;
 
 const SeriesDetail = styled(motion.div)`
@@ -31,7 +32,7 @@ const SeriesDetail = styled(motion.div)`
 
 const SeriesPoster = styled.div<{ bgphoto: string }>`
   background-image: url(${(props) => props.bgphoto});
-  width: 100%;
+  width: 124px;
   height: 190px;
   background-size: cover;
   background-position: center center;
@@ -43,7 +44,7 @@ const Info = styled(motion.div)`
   padding: 5px;
   background-color: black;
   opacity: 0;
-  width: 100%;
+  width: 124px;
   bottom: 0;
   h4 {
     margin: 5px 5px;

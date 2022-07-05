@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getMovieDetails, IMovie } from "../Routes/api";
 import { makeImagePath, NETFLIX_LOGO_URL } from "../Routes/utils";
@@ -151,19 +151,35 @@ const bigVariants = {
   },
 };
 
-function MovieOverlay() {
+interface IMoviesProps {
+  search: string | null;
+}
+
+function MovieOverlay({ search }: IMoviesProps) {
   const navigate = useNavigate();
-  const bigMovieMatch = useMatch("/movies/:movieId");
+  const location = useLocation();
+  const movieMatch = useMatch("/movies/:movieId");
+  const movieSearchMatch = useMatch("/search/movies/:movieId");
+  const movieId = movieMatch
+    ? location.pathname.slice(8)
+    : location.pathname.slice(15);
+  console.log(movieId);
   const { scrollY } = useViewportScroll();
-  const onOverlayClicked = () => navigate("/");
+  const onOverlayClicked = () => {
+    if (movieSearchMatch) {
+      navigate(`/search/movies?keyword=${search}`);
+    } else if (movieMatch) {
+      navigate("/");
+    }
+  };
   const { data: bigMovie } = useQuery<IMovie>(
-    "movie",
-    () => getMovieDetails(bigMovieMatch?.params.movieId),
-    { enabled: !!bigMovieMatch }
+    ["movie", movieId],
+    () => getMovieDetails(movieId),
+    { enabled: !!movieMatch || !!movieSearchMatch }
   );
   return (
     <AnimatePresence initial={false}>
-      {bigMovieMatch ? (
+      {movieMatch || movieSearchMatch ? (
         <>
           <BigMovie
             variants={bigVariants}
