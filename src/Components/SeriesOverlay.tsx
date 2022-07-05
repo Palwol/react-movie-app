@@ -239,7 +239,6 @@ function SeriesOverlay({ search }: ISeriesProps) {
           >
             {bigSeries && (
               <>
-                <ExitBtn onClick={onOverlayClicked}>×</ExitBtn>
                 <BigCover
                   bgphoto={
                     bigSeries.backdrop_path
@@ -247,6 +246,7 @@ function SeriesOverlay({ search }: ISeriesProps) {
                       : NETFLIX_LOGO_URL
                   }
                 >
+                  <ExitBtn onClick={onOverlayClicked}>×</ExitBtn>
                   <BigTitle>
                     <h3>{bigSeries?.name}</h3>
                     <BigBtns>

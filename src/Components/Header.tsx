@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import { Link, useMatch, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
@@ -119,6 +119,7 @@ interface IForm {
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const navigate = useNavigate();
   const homeMatch = useMatch("/");
   const seriesMatch = useMatch("/series");
   const tvMatch = useMatch("/series/:tvId");
@@ -147,7 +148,6 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
-  const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
     if (seriesSearchMatch) {

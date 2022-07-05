@@ -163,7 +163,6 @@ function MovieOverlay({ search }: IMoviesProps) {
   const movieId = movieMatch
     ? location.pathname.slice(8)
     : location.pathname.slice(15);
-  console.log(movieId);
   const { scrollY } = useViewportScroll();
   const onOverlayClicked = () => {
     if (movieSearchMatch) {
@@ -190,7 +189,6 @@ function MovieOverlay({ search }: IMoviesProps) {
           >
             {bigMovie && (
               <>
-                <ExitBtn onClick={onOverlayClicked}>×</ExitBtn>
                 <BigCover
                   bgphoto={
                     bigMovie.backdrop_path
@@ -198,6 +196,7 @@ function MovieOverlay({ search }: IMoviesProps) {
                       : NETFLIX_LOGO_URL
                   }
                 >
+                  <ExitBtn onClick={onOverlayClicked}>×</ExitBtn>
                   <BigTitle>
                     <h3>{bigMovie?.title}</h3>
                     <BigBtns>
